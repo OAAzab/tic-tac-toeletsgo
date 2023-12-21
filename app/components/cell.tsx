@@ -1,50 +1,52 @@
 import { Dispatch, SetStateAction } from "react";
 
-type CellParams = {
-    go: string;
-    setGo: Dispatch<SetStateAction<string>>;
-    id: number;
-    cells: string[];
-    setCells: Dispatch<SetStateAction<string[]>>;
-    cell: string;
-    winningMessage: string;
-}
+type CellProps = {
+  id: number;
+  go: string;
+  setGo: Dispatch<SetStateAction<string>>;
+  cells: string[];
+  setCells: Dispatch<SetStateAction<string[]>>;
+  cell: string;
+  winningMessage: string;
+};
 
-const Cell = ({go , setGo , id , cells , setCells , cell , winningMessage } : CellParams) => {
-
-  const handleClick = () => {
-    if(winningMessage) {
-        return;
+const Cell = ({
+  go,
+  setGo,
+  id,
+  cells,
+  setCells,
+  cell,
+  winningMessage,
+}: CellProps) => {
+  const handleClick = (e) => {
+    if (winningMessage) {
+      return;
     }
+    const notTaken = !cells[id];
 
-
-    const taken = !!cells[id]
-    console.log(taken);
-   if(!taken) {
-
-
-    if(go === "X") {
-      handleCellChange("X")
-      setGo("circle")
-    } else if (go === "circle") {
-        handleCellChange("circle")
-        setGo("X")
+    if (notTaken) {
+      if (go === "circle") {
+        handleCellChange("circle");
+        setGo("cross");
+      } else if (go === "cross") {
+        handleCellChange("cross");
+        setGo("circle");
+      }
     }
+  };
 
-  }
-
-}
-
-  const handleCellChange = (cellToChange : string) => {
-    let copyCells = [...cells]
+  const handleCellChange = (cellToChange: string) => {
+    let copyCells = [...cells];
     copyCells[id] = cellToChange;
-    setCells(copyCells)
-  }
+    setCells(copyCells);
+  };
 
- 
-  return <div className="square" onClick={handleClick}>
-    <div className={cell}>{cell ? ( cell === "X" ? "X" : "O" ) : ""}</div>
-  </div>;
-}
+  return (
+    <div className="square" onClick={handleClick}>
+      <div className={cell}>{cell ? (cell === "circle" ? "O" : "X") : ""}</div>
+    </div>
+  );
+};
 
 export default Cell;
